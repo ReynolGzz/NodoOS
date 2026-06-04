@@ -1,0 +1,9 @@
+{
+  "extends": "@nodo/config/typescript/nestjs",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
+}

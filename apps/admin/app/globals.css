@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { --bg: #f8f5f0; --fg: #0a0a0a; }
+  .dark { --bg: #0a0a0a; --fg: #fafafa; }
+  body { @apply bg-[var(--bg)] text-[var(--fg)] antialiased; transition: background-color 0.2s, color 0.2s; }
+}

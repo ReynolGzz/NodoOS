@@ -1,0 +1,11 @@
+{
+  "name": "@nodo/config",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./tailwind": "./tailwind.config.js",
+    "./typescript/nextjs": "./typescript/nextjs.json",
+    "./typescript/base": "./typescript/base.json",
+    "./typescript/nestjs": "./typescript/nestjs.json"
+  }
+}

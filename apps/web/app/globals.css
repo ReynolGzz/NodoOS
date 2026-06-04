@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: theme(colors.surface.DEFAULT);
+    --bg-elevated: theme(colors.surface.elevated);
+    --fg: theme(colors.gray.900);
+    --fg-muted: theme(colors.gray.500);
+    --accent: theme(colors.brand.500);
+    --border: theme(colors.gray.200);
+    --radius: 1rem;
+  }
+
+  .dark {
+    --bg: theme(colors.surface.dark);
+    --bg-elevated: theme(colors.surface.dark-elevated);
+    --fg: theme(colors.gray.100);
+    --fg-muted: theme(colors.gray.400);
+    --accent: theme(colors.brand.400);
+    --border: theme(colors.gray.800);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-[var(--bg)] text-[var(--fg)];
+  }
+
+  /* Prevent layout shift on theme load */
+  html:not(.hydrated) {
+    visibility: hidden;
+  }
+
+  /* Safe areas for mobile notch/home indicator */
+  .safe-top { padding-top: env(safe-area-inset-top); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+  .safe-x {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  /* Glass morphism card */
+  .glass {
+    @apply backdrop-blur-md bg-white/60 dark:bg-black/40 border border-white/20 dark:border-white/10;
+  }
+
+  /* Scrollbar hidden */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hidden::-webkit-scrollbar { display: none; }
+}

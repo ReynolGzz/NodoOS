@@ -1,0 +1,6 @@
+{
+  "extends": "@nodo/config/typescript/nextjs",
+  "compilerOptions": {
+    "paths": { "@/*": ["./*"] }
+  }
+}
