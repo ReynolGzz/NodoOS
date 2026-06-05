@@ -9,6 +9,7 @@ import { AdminModule } from './modules/admin/admin.module'
 import { AuthModule } from './modules/auth/auth.module'
 import { BranchesModule } from './modules/branches/branches.module'
 import { TablesModule } from './modules/tables/tables.module'
+import { UsersModule } from './modules/users/users.module'
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { TablesModule } from './modules/tables/tables.module'
     AuthModule,
     BranchesModule,
     TablesModule,
+    UsersModule,
   ],
 })
 export class AppModule {}

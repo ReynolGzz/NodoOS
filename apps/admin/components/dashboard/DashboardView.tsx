@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
+import { AdminLayout } from '../layout/AdminLayout'
 
 interface DashboardStats {
   totalOrdersToday: number
@@ -35,23 +36,25 @@ export function DashboardView({ branchId, locale }: DashboardViewProps) {
   ]
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('dashboard')}</h1>
+    <AdminLayout locale={locale} branchId={branchId}>
+      <div className="p-6 space-y-6">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{t('dashboard')}</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {cards.map((card) => (
-          <div
-            key={card.label}
-            className="bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-100 dark:border-gray-800 shadow-soft"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-500 dark:text-gray-400">{card.label}</span>
-              <span className="text-2xl">{card.icon}</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {cards.map((card) => (
+            <div
+              key={card.label}
+              className="bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-100 dark:border-gray-800 shadow-soft"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-500 dark:text-gray-400">{card.label}</span>
+                <span className="text-2xl">{card.icon}</span>
+              </div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{card.value}</p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{card.value}</p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </AdminLayout>
   )
 }

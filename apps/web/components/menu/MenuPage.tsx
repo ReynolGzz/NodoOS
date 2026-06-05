@@ -67,6 +67,7 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
       <TopBar
         branchName={menuData.branch.name}
         tableNumber={menuData.table.number}
+        tableToken={tableToken}
         locale={locale}
       />
 
