@@ -14,6 +14,8 @@ import { PointsCard } from './PointsCard'
 import { RewardsGrid } from './RewardsGrid'
 import { OrderHistoryList } from './OrderHistoryList'
 import { ReorderButton } from './ReorderButton'
+import { ReservationForm } from '../productivity/ReservationForm'
+import type { ReservationDto } from '@nodo/types'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
 
@@ -22,7 +24,7 @@ interface ProfileViewProps {
   tableToken: string
 }
 
-type Tab = 'progress' | 'challenges' | 'points' | 'history'
+type Tab = 'progress' | 'challenges' | 'points' | 'history' | 'reserve'
 
 const LEVEL_LABEL_COLORS: Record<string, string> = {
   bronze: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
@@ -35,6 +37,7 @@ export function ProfileView({ locale, tableToken }: ProfileViewProps) {
   const t = useTranslations('profile')
   const tLevels = useTranslations('levels')
   const tGam = useTranslations('gamification')
+  const tProd = useTranslations('productivity')
   const router = useRouter()
   const { user, accessToken, logout } = useAuth()
   const [tab, setTab] = useState<Tab>('progress')
@@ -44,6 +47,7 @@ export function ProfileView({ locale, tableToken }: ProfileViewProps) {
   const [pointsData, setPointsData] = useState<{ balance: number } | null>(null)
   const [rewards, setRewards] = useState<Reward[]>([])
   const [history, setHistory] = useState<Order[]>([])
+  const [reservations, setReservations] = useState<ReservationDto[]>([])
   const [loading, setLoading] = useState(true)
 
   const headers = { Authorization: `Bearer ${accessToken}` }
@@ -71,14 +75,16 @@ export function ProfileView({ locale, tableToken }: ProfileViewProps) {
           api.get<{ balance: number }>('/api/profile/points', { headers }),
           api.get<Reward[]>(`/api/profile/rewards?branchId=${bid}`, { headers }),
           api.get<Order[]>('/api/profile/history', { headers }),
+          fetch(`${API}/api/productivity/reservations/my`, { headers }).then((r) => r.json()).catch(() => []),
         ])
       })
-      .then(([gam, evts, pts, rws, hist]) => {
+      .then(([gam, evts, pts, rws, hist, rsvs]) => {
         setGamification(gam)
         setEvents(evts)
         setPointsData(pts)
         setRewards(rws)
         setHistory(hist)
+        setReservations(Array.isArray(rsvs) ? rsvs : [])
       })
       .finally(() => setLoading(false))
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,6 +103,7 @@ export function ProfileView({ locale, tableToken }: ProfileViewProps) {
     { key: 'challenges', label: tGam('challenges') },
     { key: 'points',     label: t('points') },
     { key: 'history',    label: t('history') },
+    { key: 'reserve',    label: '📅' },
   ]
 
   return (
@@ -205,6 +212,48 @@ export function ProfileView({ locale, tableToken }: ProfileViewProps) {
         )}
 
         {tab === 'history' && <OrderHistoryList orders={history} locale={locale} />}
+
+        {tab === 'reserve' && branchId && (
+          <div className="p-4 space-y-6">
+            {/* Upcoming reservations */}
+            {reservations.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  {tProd('myReservations')}
+                </p>
+                {reservations.map((r) => (
+                  <div key={r.id} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+                          {new Date(r.reservedAt).toLocaleDateString(locale === 'en' ? 'en-US' : 'es-MX', { weekday: 'short', month: 'short', day: 'numeric' })}
+                          {' · '}{new Date(r.reservedAt).toLocaleTimeString(locale === 'en' ? 'en-US' : 'es-MX', { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-0.5">{r.partySize} personas · {r.durationMinutes / 60}h{r.mode ? ` · ${r.mode}` : ''}</p>
+                      </div>
+                      <span className="text-xs font-medium px-2 py-1 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
+                        {r.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* New reservation form */}
+            <div>
+              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">
+                {tProd('reserve')}
+              </p>
+              <ReservationForm
+                branchId={branchId}
+                locale={locale}
+                accessToken={accessToken ?? ''}
+                onSuccess={(r) => setReservations((prev) => [r, ...prev])}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

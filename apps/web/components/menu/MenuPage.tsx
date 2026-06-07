@@ -14,6 +14,9 @@ import { PersonalizedGreeting } from './PersonalizedGreeting'
 import { RecommendationsBar } from './RecommendationsBar'
 import { CartBar } from '../cart/CartBar'
 import { TopBar } from '../layout/TopBar'
+import { WorkModeBar } from '../productivity/WorkModeBar'
+import { ModeSelector } from '../productivity/ModeSelector'
+import { useProductivityMode } from '@/hooks/useProductivityMode'
 import { Spinner } from '@nodo/ui'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
@@ -32,8 +35,11 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
   const [error, setError] = useState<string | null>(null)
   const [recommendations, setRecommendations] = useState<RecommendationResult | null>(null)
   const [secretItems, setSecretItems] = useState<Array<{ product: Product }>>([])
+  const [modeSelectorOpen, setModeSelectorOpen] = useState(false)
   const { setTableToken } = useCart()
   const { user, accessToken } = useAuth()
+  const { mode, setMode } = useProductivityMode()
+  const isWorkMode = mode === 'work' || mode === 'study'
 
   useEffect(() => {
     setTableToken(tableToken)
@@ -98,22 +104,44 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
       />
 
       <div className="sticky top-0 z-10 bg-surface dark:bg-surface-dark border-b border-gray-100 dark:border-gray-800 safe-x">
-        <CategoryTabs
-          categories={menuData.categories}
-          activeId={activeCategory}
-          onSelect={setActiveCategory}
-          locale={locale}
-        />
+        <div className="flex items-center">
+          <div className="flex-1">
+            <CategoryTabs
+              categories={menuData.categories}
+              activeId={activeCategory}
+              onSelect={setActiveCategory}
+              locale={locale}
+            />
+          </div>
+          {/* Mode button */}
+          <button
+            onClick={() => setModeSelectorOpen(true)}
+            className="px-3 py-2 mr-2 flex-shrink-0 text-lg"
+            title={mode}
+          >
+            {mode === 'casual' ? '🛋️' : mode === 'work' ? '💻' : mode === 'study' ? '📚' : '🤝'}
+          </button>
+        </div>
       </div>
 
       <main className="flex-1 pb-32 safe-x">
-        {/* Personalized greeting */}
-        {recommendations?.greeting && (
+        {/* Work / Study mode bar */}
+        {isWorkMode && (
+          <WorkModeBar
+            mode={mode as 'work' | 'study'}
+            tableToken={tableToken}
+            locale={locale}
+            onModeChange={() => setMode('casual')}
+          />
+        )}
+
+        {/* Personalized greeting (hidden in work mode) */}
+        {!isWorkMode && recommendations?.greeting && (
           <PersonalizedGreeting greeting={recommendations.greeting} />
         )}
 
-        {/* Recommendations bar */}
-        {!activeCategory && recommendations?.products && recommendations.products.length > 0 && (
+        {/* Recommendations bar (hidden in work mode) */}
+        {!isWorkMode && !activeCategory && recommendations?.products && recommendations.products.length > 0 && (
           <RecommendationsBar
             products={recommendations.products}
             locale={locale}
@@ -171,6 +199,8 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
       </main>
 
       <CartBar tableToken={tableToken} locale={locale} />
+
+      <ModeSelector open={modeSelectorOpen} onClose={() => setModeSelectorOpen(false)} />
 
       {selectedProduct && (
         <ProductModal

@@ -12,6 +12,7 @@ import { TablesModule } from './modules/tables/tables.module'
 import { UsersModule } from './modules/users/users.module'
 import { RecommendationsModule } from './modules/recommendations/recommendations.module'
 import { GamificationModule } from './modules/gamification/gamification.module'
+import { ProductivityModule } from './modules/productivity/productivity.module'
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { GamificationModule } from './modules/gamification/gamification.module'
     UsersModule,
     RecommendationsModule,
     GamificationModule,
+    ProductivityModule,
   ],
 })
 export class AppModule {}

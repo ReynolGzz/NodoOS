@@ -6,6 +6,8 @@ import { motion } from 'framer-motion'
 import type { Order } from '@nodo/types'
 import { OrderStatus } from '@nodo/types'
 import { useOrderSocket } from '@/hooks/useOrderSocket'
+import { useProductivityMode } from '@/hooks/useProductivityMode'
+import { BillSplitter } from '../productivity/BillSplitter'
 import { api } from '@/lib/api'
 import { Spinner } from '@nodo/ui'
 import { cn } from '@nodo/ui'
@@ -20,12 +22,14 @@ const STATUS_STEPS = [
 interface OrderTrackingPageProps {
   orderId: string
   tableToken: string
+  locale?: string
 }
 
-export function OrderTrackingPage({ orderId, tableToken }: OrderTrackingPageProps) {
+export function OrderTrackingPage({ orderId, tableToken, locale = 'es' }: OrderTrackingPageProps) {
   const t = useTranslations('orderStatus')
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
+  const { mode } = useProductivityMode()
 
   useEffect(() => {
     api.get<Order>(`/api/orders/${orderId}`)
@@ -113,6 +117,13 @@ export function OrderTrackingPage({ orderId, tableToken }: OrderTrackingPageProp
         <p className="mt-4 text-xs text-gray-400">
           {t('orderNumber', { id: order.id.slice(-6).toUpperCase() })}
         </p>
+      )}
+
+      {/* Bill splitter — only shown in meeting mode after delivery */}
+      {order && mode === 'meeting' && currentStatus === OrderStatus.DELIVERED && (
+        <div className="w-full max-w-sm mt-4">
+          <BillSplitter orderId={order.id} total={order.total} locale={locale} />
+        </div>
       )}
     </div>
   )

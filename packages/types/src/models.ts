@@ -207,6 +207,40 @@ export interface Staff {
   branchId?: string
 }
 
+// ─── Productivity ─────────────────────────────────────────────────────────────
+
+export interface TableSessionDto {
+  id: string
+  tableId: string
+  userId: string | null
+  mode: TableMode
+  participants: string[]
+  startedAt: string
+  endedAt: string | null
+}
+
+export interface ReservationDto {
+  id: string
+  branchId: string
+  userId: string
+  tableId: string | null
+  reservedAt: string
+  durationMinutes: number
+  partySize: number
+  mode: string | null
+  status: string
+  notes: string | null
+  createdAt: string
+}
+
+export interface BillSplit {
+  orderId: string
+  total: number
+  partySize: number
+  perPerson: number
+  items: Array<{ name: string; price: number; quantity: number; subtotal: number }>
+}
+
 // ─── Gamification ─────────────────────────────────────────────────────────────
 
 export interface BadgeDto {
