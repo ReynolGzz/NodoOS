@@ -209,6 +209,12 @@
     "addTable": "Add table",
     "qrCode": "QR Code"
   },
+  "recommendations": {
+    "forYou": "Recommended for you",
+    "basedOnTime": "Perfect for this moment",
+    "basedOnWeather": "Ideal for today's weather",
+    "seeAll": "See full menu"
+  },
   "errors": {
     "generic": "Something went wrong. Please try again.",
     "notFound": "Not found",

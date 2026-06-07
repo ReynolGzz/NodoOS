@@ -12,6 +12,21 @@ class SendMagicLinkDto {
   locale?: string
 }
 
+class GoogleAuthDto {
+  @IsString()
+  googleId: string
+
+  @IsEmail()
+  email: string
+
+  @IsString()
+  name: string
+
+  @IsOptional()
+  @IsString()
+  picture?: string
+}
+
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -30,5 +45,11 @@ export class AuthController {
     const result = await this.authService.verifyMagicLink(token)
     if (!result) throw new BadRequestException('Invalid or expired token')
     return result
+  }
+
+  @Post('google')
+  @ApiOperation({ summary: 'Sign in with Google credentials' })
+  signInWithGoogle(@Body() dto: GoogleAuthDto) {
+    return this.authService.handleGoogleUser(dto)
   }
 }

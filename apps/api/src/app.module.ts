@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module'
 import { BranchesModule } from './modules/branches/branches.module'
 import { TablesModule } from './modules/tables/tables.module'
 import { UsersModule } from './modules/users/users.module'
+import { RecommendationsModule } from './modules/recommendations/recommendations.module'
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { UsersModule } from './modules/users/users.module'
     BranchesModule,
     TablesModule,
     UsersModule,
+    RecommendationsModule,
   ],
 })
 export class AppModule {}

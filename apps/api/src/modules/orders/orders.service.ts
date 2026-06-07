@@ -7,6 +7,7 @@ import { Product } from '../../entities/product.entity'
 import { Table } from '../../entities/table.entity'
 import { CreateOrderDto } from './dto/create-order.dto'
 import { OrderStatus } from '@nodo/types'
+import { UserProfileService } from '../recommendations/user-profile.service'
 
 @Injectable()
 export class OrdersService {
@@ -15,6 +16,7 @@ export class OrdersService {
     @InjectRepository(OrderItem) private itemRepo: Repository<OrderItem>,
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Table) private tableRepo: Repository<Table>,
+    private userProfileService: UserProfileService,
   ) {}
 
   async create(dto: CreateOrderDto): Promise<Order> {
@@ -100,6 +102,11 @@ export class OrdersService {
     const order = await this.findById(id)
     order.status = status
     await this.orderRepo.save(order)
+
+    if (status === OrderStatus.DELIVERED && order.userId) {
+      this.userProfileService.updateAfterOrder(order.userId, order as any).catch(() => {})
+    }
+
     return order
   }
 

@@ -209,6 +209,12 @@
     "addTable": "Agregar mesa",
     "qrCode": "Código QR"
   },
+  "recommendations": {
+    "forYou": "Recomendado para ti",
+    "basedOnTime": "Perfecto para este momento",
+    "basedOnWeather": "Ideal para el clima de hoy",
+    "seeAll": "Ver todo el menú"
+  },
   "errors": {
     "generic": "Algo salió mal. Inténtalo de nuevo.",
     "notFound": "No encontrado",

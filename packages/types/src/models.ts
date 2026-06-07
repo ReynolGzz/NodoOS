@@ -206,3 +206,21 @@ export interface Staff {
   role: UserRole
   branchId?: string
 }
+
+// ─── Recommendations ──────────────────────────────────────────────────────────
+
+export interface RecommendationResult {
+  products: Product[]
+  greeting: string
+}
+
+export interface UserProfile {
+  userId: string
+  preferredMilk: string | null
+  preferredSugar: string | null
+  avgTicket: number | null
+  peakHours: Record<string, number>
+  topCategories: Array<{ categoryId: string; frequency: number }>
+  topProducts: Array<{ productId: string; orderCount: number }>
+  lastUpdated: string
+}

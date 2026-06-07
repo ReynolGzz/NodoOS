@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 import { Order } from '../../entities/order.entity'
 import { StripeService } from './stripe.service'
 import { MercadoPagoService } from './mercadopago.service'
+import { LoyaltyService } from '../users/loyalty.service'
 import { PaymentMethod, PaymentStatus } from '@nodo/types'
 
 @Injectable()
@@ -12,6 +13,7 @@ export class PaymentsService {
     @InjectRepository(Order) private orderRepo: Repository<Order>,
     private stripeService: StripeService,
     private mpService: MercadoPagoService,
+    private loyaltyService: LoyaltyService,
   ) {}
 
   async createPaymentIntent(orderId: string, method: PaymentMethod) {
@@ -53,6 +55,10 @@ export class PaymentsService {
           paymentStatus: PaymentStatus.PAID,
           paymentIntentId: intent.id,
         })
+        const order = await this.orderRepo.findOne({ where: { id: intent.metadata.orderId } })
+        if (order?.userId) {
+          await this.loyaltyService.earnFromPurchase(order.userId, order.id, order.total)
+        }
       }
     }
   }

@@ -8,11 +8,13 @@ import { OrderItem } from '../../entities/order-item.entity'
 import { Product } from '../../entities/product.entity'
 import { Table } from '../../entities/table.entity'
 import { UsersModule } from '../users/users.module'
+import { RecommendationsModule } from '../recommendations/recommendations.module'
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order, OrderItem, Product, Table]),
     forwardRef(() => UsersModule),
+    RecommendationsModule,
   ],
   controllers: [OrdersController],
   providers: [OrdersService, OrdersGateway],

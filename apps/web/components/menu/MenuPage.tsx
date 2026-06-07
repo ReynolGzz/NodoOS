@@ -3,15 +3,20 @@
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
-import type { MenuData, Category, Product } from '@nodo/types'
+import type { MenuData, Product, RecommendationResult } from '@nodo/types'
 import { api } from '@/lib/api'
 import { useCart } from '@/hooks/useCart'
+import { useAuth } from '@/hooks/useAuth'
 import { CategoryTabs } from './CategoryTabs'
 import { ProductGrid } from './ProductGrid'
 import { ProductModal } from './ProductModal'
+import { PersonalizedGreeting } from './PersonalizedGreeting'
+import { RecommendationsBar } from './RecommendationsBar'
 import { CartBar } from '../cart/CartBar'
 import { TopBar } from '../layout/TopBar'
-import { Spinner, Badge } from '@nodo/ui'
+import { Spinner } from '@nodo/ui'
+
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
 
 interface MenuPageProps {
   tableToken: string
@@ -19,14 +24,15 @@ interface MenuPageProps {
 }
 
 export function MenuPage({ tableToken, locale }: MenuPageProps) {
-  const t = useTranslations('menu')
   const tErrors = useTranslations('errors')
   const [menuData, setMenuData] = useState<MenuData | null>(null)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [recommendations, setRecommendations] = useState<RecommendationResult | null>(null)
   const { setTableToken } = useCart()
+  const { user } = useAuth()
 
   useEffect(() => {
     setTableToken(tableToken)
@@ -34,10 +40,19 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
       .then((data) => {
         setMenuData(data)
         setActiveCategory(data.categories[0]?.id ?? null)
+
+        // Fetch personalized recommendations after menu loads
+        const params = new URLSearchParams({ branchId: data.branch.id, locale })
+        if (user?.id) params.set('userId', user.id)
+        if (user?.name) params.set('userName', user.name)
+        fetch(`${API}/api/recommendations?${params}`)
+          .then((r) => r.json())
+          .then(setRecommendations)
+          .catch(() => {})
       })
       .catch(() => setError(tErrors('tableNotFound')))
       .finally(() => setLoading(false))
-  }, [tableToken, setTableToken, tErrors])
+  }, [tableToken, locale, user, setTableToken, tErrors])
 
   if (loading) {
     return (
@@ -81,6 +96,20 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
       </div>
 
       <main className="flex-1 pb-32 safe-x">
+        {/* Personalized greeting */}
+        {recommendations?.greeting && (
+          <PersonalizedGreeting greeting={recommendations.greeting} />
+        )}
+
+        {/* Recommendations bar — only shows on the "all" view (no active category filter) */}
+        {!activeCategory && recommendations?.products && recommendations.products.length > 0 && (
+          <RecommendationsBar
+            products={recommendations.products}
+            locale={locale}
+            onSelect={setSelectedProduct}
+          />
+        )}
+
         <AnimatePresence mode="wait">
           <motion.div
             key={activeCategory ?? 'all'}
