@@ -8,6 +8,7 @@ import { Table } from '../../entities/table.entity'
 import { CreateOrderDto } from './dto/create-order.dto'
 import { OrderStatus } from '@nodo/types'
 import { UserProfileService } from '../recommendations/user-profile.service'
+import { GamificationService } from '../gamification/gamification.service'
 
 @Injectable()
 export class OrdersService {
@@ -17,6 +18,7 @@ export class OrdersService {
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Table) private tableRepo: Repository<Table>,
     private userProfileService: UserProfileService,
+    private gamificationService: GamificationService,
   ) {}
 
   async create(dto: CreateOrderDto): Promise<Order> {
@@ -104,7 +106,20 @@ export class OrdersService {
     await this.orderRepo.save(order)
 
     if (status === OrderStatus.DELIVERED && order.userId) {
-      this.userProfileService.updateAfterOrder(order.userId, order as any).catch(() => {})
+      const uid = order.userId
+      this.userProfileService.updateAfterOrder(uid, order as any).catch(() => {})
+
+      // Award XP: 1 XP per $10 MXN
+      const xpAmount = Math.max(1, Math.floor(order.total / 10))
+      this.gamificationService.earnXp(uid, xpAmount).then(async () => {
+        await Promise.all([
+          this.gamificationService.checkOrderBadges(uid),
+          this.gamificationService.checkSpendBadges(uid, order.total),
+          this.gamificationService.checkCategoryBadges(uid),
+          this.gamificationService.incrementChallengeProgress(uid, 'order_count'),
+          this.gamificationService.incrementChallengeProgress(uid, 'spend_amount', Math.floor(order.total)),
+        ])
+      }).catch(() => {})
     }
 
     return order

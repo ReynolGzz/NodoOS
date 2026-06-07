@@ -209,6 +209,28 @@
     "addTable": "Add table",
     "qrCode": "QR Code"
   },
+  "gamification": {
+    "progress": "Progress",
+    "challenges": "Challenges",
+    "level": "Level",
+    "xp": "{xp} XP",
+    "xpToNext": "{xp} XP to {level}",
+    "maxLevel": "Max level!",
+    "badges": "Badges",
+    "badgesEarned": "{count} earned",
+    "badgesEarned_other": "{count} earned",
+    "locked": "Locked",
+    "newBadge": "New badge!",
+    "levelUp": "Leveled up!",
+    "events": "Events",
+    "attend": "Attend (+{xp} XP)",
+    "attended": "Attended ✓",
+    "secretMenu": "Secret Menu",
+    "secretMenuDesc": "Unlocked by your level",
+    "challengeCompleted": "Challenge complete! +{xp} XP",
+    "noEvents": "No upcoming events",
+    "progress_label": "{current}/{target}"
+  },
   "recommendations": {
     "forYou": "Recommended for you",
     "basedOnTime": "Perfect for this moment",

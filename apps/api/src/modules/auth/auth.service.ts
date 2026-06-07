@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import * as nodemailer from 'nodemailer'
 import * as crypto from 'crypto'
 import { UsersService } from '../users/users.service'
+import { GamificationService } from '../gamification/gamification.service'
 
 // In-memory magic link store — swap for Redis in production
 const magicLinks = new Map<string, { email: string; expiresAt: number }>()
@@ -14,6 +15,7 @@ export class AuthService {
     private jwt: JwtService,
     private config: ConfigService,
     private usersService: UsersService,
+    private gamificationService: GamificationService,
   ) {}
 
   private signToken(userId: string, email: string) {
@@ -50,6 +52,12 @@ export class AuthService {
 
     const user = await this.usersService.findOrCreateByEmail(entry.email)
     await this.usersService.incrementVisit(user.id)
+
+    // Award visit XP + check visit badges (fire-and-forget)
+    this.gamificationService.earnXp(user.id, 10).then(async () => {
+      await this.gamificationService.checkVisitBadges(user.id, user.totalVisits + 1)
+      await this.gamificationService.incrementChallengeProgress(user.id, 'visit_count')
+    }).catch(() => {})
 
     return {
       accessToken: this.signToken(user.id, user.email!),

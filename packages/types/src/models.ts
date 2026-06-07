@@ -207,6 +207,59 @@ export interface Staff {
   branchId?: string
 }
 
+// ─── Gamification ─────────────────────────────────────────────────────────────
+
+export interface BadgeDto {
+  id: string
+  slug: string
+  nameEs: string
+  nameEn: string
+  descriptionEs: string | null
+  descriptionEn: string | null
+  icon: string
+  xpReward: number
+  earned: boolean
+  earnedAt: string | null
+}
+
+export interface ChallengeDto {
+  id: string
+  slug: string
+  nameEs: string
+  nameEn: string
+  descriptionEs: string | null
+  descriptionEn: string | null
+  challengeType: string
+  targetValue: number
+  xpReward: number
+  progress: number
+  completedAt: string | null
+  expiresAt: string | null
+}
+
+export interface CafeEvent {
+  id: string
+  branchId: string
+  nameEs: string
+  nameEn: string
+  descriptionEs: string | null
+  descriptionEn: string | null
+  eventType: string
+  startsAt: string
+  endsAt: string
+  xpReward: number
+}
+
+export interface GamificationProfile {
+  xp: number
+  level: UserLevel
+  next: UserLevel | null
+  xpToNext: number
+  progress: number
+  badges: BadgeDto[]
+  challenges: ChallengeDto[]
+}
+
 // ─── Recommendations ──────────────────────────────────────────────────────────
 
 export interface RecommendationResult {

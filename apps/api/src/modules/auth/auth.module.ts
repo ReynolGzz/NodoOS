@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { UsersModule } from '../users/users.module'
+import { GamificationModule } from '../gamification/gamification.module'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from '../users/users.module'
       }),
     }),
     UsersModule,
+    GamificationModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

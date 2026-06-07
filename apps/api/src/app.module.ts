@@ -11,6 +11,7 @@ import { BranchesModule } from './modules/branches/branches.module'
 import { TablesModule } from './modules/tables/tables.module'
 import { UsersModule } from './modules/users/users.module'
 import { RecommendationsModule } from './modules/recommendations/recommendations.module'
+import { GamificationModule } from './modules/gamification/gamification.module'
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { RecommendationsModule } from './modules/recommendations/recommendations
     TablesModule,
     UsersModule,
     RecommendationsModule,
+    GamificationModule,
   ],
 })
 export class AppModule {}

@@ -9,12 +9,14 @@ import { Product } from '../../entities/product.entity'
 import { Table } from '../../entities/table.entity'
 import { UsersModule } from '../users/users.module'
 import { RecommendationsModule } from '../recommendations/recommendations.module'
+import { GamificationModule } from '../gamification/gamification.module'
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order, OrderItem, Product, Table]),
     forwardRef(() => UsersModule),
     RecommendationsModule,
+    GamificationModule,
   ],
   controllers: [OrdersController],
   providers: [OrdersService, OrdersGateway],

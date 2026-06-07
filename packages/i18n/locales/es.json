@@ -209,6 +209,28 @@
     "addTable": "Agregar mesa",
     "qrCode": "Código QR"
   },
+  "gamification": {
+    "progress": "Progreso",
+    "challenges": "Retos",
+    "level": "Nivel",
+    "xp": "{xp} XP",
+    "xpToNext": "{xp} XP para {level}",
+    "maxLevel": "¡Nivel máximo!",
+    "badges": "Insignias",
+    "badgesEarned": "{count} ganada",
+    "badgesEarned_other": "{count} ganadas",
+    "locked": "Bloqueada",
+    "newBadge": "¡Nueva insignia!",
+    "levelUp": "¡Subiste de nivel!",
+    "events": "Eventos",
+    "attend": "Asistir (+{xp} XP)",
+    "attended": "Asistido ✓",
+    "secretMenu": "Menú Secreto",
+    "secretMenuDesc": "Desbloqueado por tu nivel",
+    "challengeCompleted": "¡Reto completado! +{xp} XP",
+    "noEvents": "Sin eventos próximos",
+    "progress_label": "{current}/{target}"
+  },
   "recommendations": {
     "forYou": "Recomendado para ti",
     "basedOnTime": "Perfecto para este momento",

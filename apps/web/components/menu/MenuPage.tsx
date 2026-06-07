@@ -31,8 +31,9 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [recommendations, setRecommendations] = useState<RecommendationResult | null>(null)
+  const [secretItems, setSecretItems] = useState<Array<{ product: Product }>>([])
   const { setTableToken } = useCart()
-  const { user } = useAuth()
+  const { user, accessToken } = useAuth()
 
   useEffect(() => {
     setTableToken(tableToken)
@@ -41,7 +42,7 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
         setMenuData(data)
         setActiveCategory(data.categories[0]?.id ?? null)
 
-        // Fetch personalized recommendations after menu loads
+        // Fetch personalized recommendations
         const params = new URLSearchParams({ branchId: data.branch.id, locale })
         if (user?.id) params.set('userId', user.id)
         if (user?.name) params.set('userName', user.name)
@@ -49,6 +50,16 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
           .then((r) => r.json())
           .then(setRecommendations)
           .catch(() => {})
+
+        // Fetch secret menu if authenticated
+        if (accessToken) {
+          fetch(`${API}/api/gamification/secret-menu`, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          })
+            .then((r) => r.json())
+            .then(setSecretItems)
+            .catch(() => {})
+        }
       })
       .catch(() => setError(tErrors('tableNotFound')))
       .finally(() => setLoading(false))
@@ -101,13 +112,45 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
           <PersonalizedGreeting greeting={recommendations.greeting} />
         )}
 
-        {/* Recommendations bar — only shows on the "all" view (no active category filter) */}
+        {/* Recommendations bar */}
         {!activeCategory && recommendations?.products && recommendations.products.length > 0 && (
           <RecommendationsBar
             products={recommendations.products}
             locale={locale}
             onSelect={setSelectedProduct}
           />
+        )}
+
+        {/* Secret menu — shown only when user has unlocked items */}
+        {!activeCategory && secretItems.length > 0 && (
+          <div className="py-3">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide px-4 mb-2 flex items-center gap-1">
+              <span>🔓</span>
+              {locale === 'en' ? 'Secret Menu' : 'Menú Secreto'}
+            </p>
+            <div className="flex gap-3 overflow-x-auto scrollbar-hidden px-4 pb-1">
+              {secretItems.map((item) => {
+                const name = locale === 'en' ? item.product.nameEn : item.product.nameEs
+                return (
+                  <motion.button
+                    key={item.product.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    onClick={() => setSelectedProduct(item.product)}
+                    className="flex-shrink-0 w-32 bg-gray-900 dark:bg-gray-800 rounded-2xl overflow-hidden text-left active:scale-95 transition-transform ring-1 ring-brand-500/30"
+                  >
+                    <div className="w-full h-20 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-2xl">
+                      🤫
+                    </div>
+                    <div className="p-2">
+                      <p className="text-xs font-medium text-white line-clamp-2 leading-tight">{name}</p>
+                      <p className="text-xs text-brand-400 font-semibold mt-1">${item.product.price.toFixed(2)}</p>
+                    </div>
+                  </motion.button>
+                )
+              })}
+            </div>
+          </div>
         )}
 
         <AnimatePresence mode="wait">

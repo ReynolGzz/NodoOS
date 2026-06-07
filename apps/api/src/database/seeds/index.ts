@@ -20,6 +20,9 @@ async function seed() {
   const productRepo = AppDataSource.getRepository('Product')
   const optionRepo = AppDataSource.getRepository('ProductOption')
   const valueRepo = AppDataSource.getRepository('OptionValue')
+  const badgeRepo = AppDataSource.getRepository('Badge')
+  const challengeRepo = AppDataSource.getRepository('Challenge')
+  const eventRepo = AppDataSource.getRepository('CafeEvent')
 
   // Branch
   const branch = await branchRepo.save(branchRepo.create({
@@ -137,6 +140,44 @@ async function seed() {
   }
 
   console.log('✓ Products and options created')
+
+  // ── Badges ──────────────────────────────────────────────────────────────────
+  await badgeRepo.save([
+    badgeRepo.create({ slug: 'first-order',    nameEs: 'Primera Orden',      nameEn: 'First Order',       descriptionEs: 'Hiciste tu primer pedido', descriptionEn: 'You placed your first order', icon: '☕', xpReward: 50,  triggerType: 'order_count',  triggerValue: 1 }),
+    badgeRepo.create({ slug: 'coffee-regular', nameEs: 'Café Regular',       nameEn: 'Coffee Regular',    descriptionEs: '5 visitas al café',        descriptionEn: '5 visits to the café',       icon: '⭐', xpReward: 100, triggerType: 'visit_count',  triggerValue: 5 }),
+    badgeRepo.create({ slug: 'explorer',       nameEs: 'Explorador',         nameEn: 'Explorer',          descriptionEs: 'Probaste 3 categorías',    descriptionEn: 'Tried 3 different categories', icon: '🗺️', xpReward: 75,  triggerType: 'category_count', triggerValue: 3 }),
+    badgeRepo.create({ slug: 'coffee-addict',  nameEs: 'Café Addict',        nameEn: 'Coffee Addict',     descriptionEs: '10 órdenes completadas',   descriptionEn: '10 orders completed',        icon: '🏆', xpReward: 200, triggerType: 'order_count',  triggerValue: 10 }),
+    badgeRepo.create({ slug: 'big-spender',    nameEs: 'Gran Gastador',      nameEn: 'Big Spender',       descriptionEs: 'Gastaste $500 en total',   descriptionEn: 'Spent $500 total',           icon: '💰', xpReward: 150, triggerType: 'spend_total',  triggerValue: 500 }),
+    badgeRepo.create({ slug: 'level-silver',   nameEs: 'Plata',              nameEn: 'Silver',            descriptionEs: 'Alcanzaste nivel Plata',   descriptionEn: 'Reached Silver level',       icon: '🥈', xpReward: 0,   triggerType: 'level_up',     triggerValue: 500 }),
+    badgeRepo.create({ slug: 'level-gold',     nameEs: 'Oro',                nameEn: 'Gold',              descriptionEs: 'Alcanzaste nivel Oro',     descriptionEn: 'Reached Gold level',         icon: '🥇', xpReward: 0,   triggerType: 'level_up',     triggerValue: 2000 }),
+    badgeRepo.create({ slug: 'level-black',    nameEs: 'Leyenda',            nameEn: 'Legend',            descriptionEs: 'Nivel máximo: Black',      descriptionEn: 'Max level: Black',           icon: '⚫', xpReward: 0,   triggerType: 'level_up',     triggerValue: 10000 }),
+  ])
+  console.log('✓ Badges seeded')
+
+  // ── Challenges (weekly, rolling) ─────────────────────────────────────────────
+  const nextMonday = new Date()
+  nextMonday.setDate(nextMonday.getDate() + (8 - nextMonday.getDay()) % 7 || 7)
+  nextMonday.setHours(23, 59, 59, 0)
+
+  await challengeRepo.save([
+    challengeRepo.create({ slug: 'weekly-3-orders',      nameEs: '3 pedidos esta semana',       nameEn: '3 orders this week',         descriptionEs: 'Realiza 3 pedidos en 7 días',     descriptionEn: 'Place 3 orders in 7 days',           challengeType: 'order_count',  targetValue: 3,   xpReward: 100, expiresAt: nextMonday }),
+    challengeRepo.create({ slug: 'weekly-try-3-cats',    nameEs: 'Explorador semanal',          nameEn: 'Weekly explorer',            descriptionEs: 'Prueba 3 categorías diferentes',  descriptionEn: 'Try 3 different categories',         challengeType: 'category_count', targetValue: 3, xpReward: 150, expiresAt: nextMonday }),
+    challengeRepo.create({ slug: 'weekly-spend-300',     nameEs: 'Gasta $300 esta semana',      nameEn: 'Spend $300 this week',       descriptionEs: 'Acumula $300 en pedidos',         descriptionEn: 'Accumulate $300 in orders',          challengeType: 'spend_amount', targetValue: 300, xpReward: 200, expiresAt: nextMonday }),
+    challengeRepo.create({ slug: 'lifetime-10-visits',   nameEs: '10 visitas',                  nameEn: '10 visits',                  descriptionEs: 'Visita el café 10 veces en total', descriptionEn: 'Visit the café 10 times total',     challengeType: 'visit_count',  targetValue: 10,  xpReward: 250 }),
+  ])
+  console.log('✓ Challenges seeded')
+
+  // ── Events ───────────────────────────────────────────────────────────────────
+  const eventBase = (daysAhead: number, hour: number) => {
+    const d = new Date(); d.setDate(d.getDate() + daysAhead); d.setHours(hour, 0, 0, 0); return d
+  }
+  await eventRepo.save([
+    eventRepo.create({ branchId: branch.id, nameEs: 'Jazz & Coffee Mondays', nameEn: 'Jazz & Coffee Mondays', descriptionEs: 'Música en vivo y café de especialidad', descriptionEn: 'Live music and specialty coffee', eventType: 'jazz',     startsAt: eventBase(1, 19), endsAt: eventBase(1, 22), xpReward: 50 }),
+    eventRepo.create({ branchId: branch.id, nameEs: 'Noche de Código',       nameEn: 'Coding Night',           descriptionEs: 'Trabaja con otros makers',              descriptionEn: 'Work alongside fellow makers',   eventType: 'coding',   startsAt: eventBase(3, 18), endsAt: eventBase(3, 22), xpReward: 50 }),
+    eventRepo.create({ branchId: branch.id, nameEs: 'Cata de Café',          nameEn: 'Coffee Tasting',         descriptionEs: 'Descubre tres orígenes diferentes',     descriptionEn: 'Discover three different origins', eventType: 'tasting', startsAt: eventBase(5, 17), endsAt: eventBase(5, 19), xpReward: 75 }),
+  ])
+  console.log('✓ Events seeded')
+
   console.log('\n🎉 Seed complete!')
   console.log(`\nBranch ID: ${branch.id}`)
   console.log('Table QR tokens:')
