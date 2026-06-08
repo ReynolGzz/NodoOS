@@ -19,11 +19,12 @@ const MODE_CONFIG: Record<'work' | 'study', { color: string; label: string; icon
 interface WorkModeBarProps {
   mode: 'work' | 'study'
   tableToken: string
+  branchId: string
   locale: string
   onModeChange: () => void
 }
 
-export function WorkModeBar({ mode, tableToken, locale, onModeChange }: WorkModeBarProps) {
+export function WorkModeBar({ mode, tableToken, branchId, locale, onModeChange }: WorkModeBarProps) {
   const t = useTranslations('productivity')
   const { addItem } = useCart()
   const { accessToken } = useAuth()
@@ -35,7 +36,7 @@ export function WorkModeBar({ mode, tableToken, locale, onModeChange }: WorkMode
     if (!accessToken) return
     setRefilling(true)
     try {
-      const res = await fetch(`${API}/api/profile/last-order`, {
+      const res = await fetch(`${API}/api/profile/last-order?branchId=${branchId}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       if (!res.ok) return

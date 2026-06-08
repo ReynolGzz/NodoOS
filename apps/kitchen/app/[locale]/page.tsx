@@ -1,4 +1,4 @@
-import { KitchenDisplay } from '@/components/kitchen/KitchenDisplay'
+import { KitchenGate } from '@/components/kitchen/KitchenGate'
 
 interface Props {
   params: Promise<{ locale: string }>
@@ -9,5 +9,5 @@ export default async function KitchenPage({ params, searchParams }: Props) {
   const { locale } = await params
   const { branchId } = await searchParams
 
-  return <KitchenDisplay branchId={branchId ?? ''} locale={locale} />
+  return <KitchenGate initialBranchId={branchId ?? ''} locale={locale} />
 }

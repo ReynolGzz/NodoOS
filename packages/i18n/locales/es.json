@@ -94,7 +94,8 @@
     "cancelled": "Cancelado",
     "estimatedTime": "Tiempo estimado: {minutes} min",
     "orderNumber": "Pedido #{id}",
-    "table": "Mesa {number}"
+    "table": "Mesa {number}",
+    "reconnecting": "Reconectando..."
   },
   "auth": {
     "signIn": "Iniciar sesión",
@@ -137,7 +138,8 @@
       "light": "Poca",
       "medium": "Normal",
       "extra": "Extra"
-    }
+    },
+    "logout": "Salir"
   },
   "loyalty": {
     "points": "{count} punto",
@@ -312,7 +314,11 @@
     "hours1": "1 hora",
     "hours2": "2 horas",
     "hours3": "3 horas",
-    "hours4": "4 horas"
+    "hours4": "4 horas",
+    "timeLabel": "Hora",
+    "noPreference": "Sin preferencia",
+    "breakdown": "Desglose",
+    "optional": "opcional"
   },
   "gamification": {
     "progress": "Progreso",

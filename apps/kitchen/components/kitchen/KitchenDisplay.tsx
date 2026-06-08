@@ -12,9 +12,10 @@ import { ThemeToggle, LanguageSwitcher, Badge } from '@nodo/ui'
 interface KitchenDisplayProps {
   branchId: string
   locale: string
+  onReset?: () => void
 }
 
-export function KitchenDisplay({ branchId, locale }: KitchenDisplayProps) {
+export function KitchenDisplay({ branchId, locale, onReset }: KitchenDisplayProps) {
   const t = useTranslations('kitchen')
   const [orders, setOrders] = useState<Order[]>([])
   const [filter, setFilter] = useState<'active' | 'all'>('active')
@@ -77,6 +78,15 @@ export function KitchenDisplay({ branchId, locale }: KitchenDisplayProps) {
             ))}
           </div>
           <LanguageSwitcher currentLocale={locale} onSwitch={() => {}} />
+          {onReset && (
+            <button
+              onClick={onReset}
+              className="text-xs text-gray-500 hover:text-red-400 transition-colors px-2"
+              title="Cambiar configuración"
+            >
+              ⚙
+            </button>
+          )}
         </div>
       </header>
 

@@ -94,7 +94,8 @@
     "cancelled": "Cancelled",
     "estimatedTime": "Estimated time: {minutes} min",
     "orderNumber": "Order #{id}",
-    "table": "Table {number}"
+    "table": "Table {number}",
+    "reconnecting": "Reconnecting..."
   },
   "auth": {
     "signIn": "Sign in",
@@ -137,7 +138,8 @@
       "light": "Light",
       "medium": "Regular",
       "extra": "Extra"
-    }
+    },
+    "logout": "Sign out"
   },
   "loyalty": {
     "points": "{count} point",
@@ -312,7 +314,11 @@
     "hours1": "1 hour",
     "hours2": "2 hours",
     "hours3": "3 hours",
-    "hours4": "4 hours"
+    "hours4": "4 hours",
+    "timeLabel": "Time",
+    "noPreference": "No preference",
+    "breakdown": "Breakdown",
+    "optional": "optional"
   },
   "gamification": {
     "progress": "Progress",

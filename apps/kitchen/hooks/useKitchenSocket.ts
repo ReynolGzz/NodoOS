@@ -24,7 +24,10 @@ export function useKitchenSocket({ branchId, onNewOrder, onStatusChanged }: UseK
 
     socket.on('connect', () => {
       setConnected(true)
-      socket.emit(SOCKET_EVENTS.KITCHEN_JOIN, { branchId, token: 'kitchen-token' })
+      const kitchenToken = (typeof window !== 'undefined' ? localStorage.getItem('nodo-kitchen-token') : null)
+        ?? process.env.NEXT_PUBLIC_KITCHEN_TOKEN
+        ?? ''
+      socket.emit(SOCKET_EVENTS.KITCHEN_JOIN, { branchId, token: kitchenToken })
     })
 
     socket.on('disconnect', () => setConnected(false))

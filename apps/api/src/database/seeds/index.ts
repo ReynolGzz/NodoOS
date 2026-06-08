@@ -13,23 +13,56 @@ async function seed() {
   await AppDataSource.initialize()
   console.log('🌱 Seeding database...')
 
-  const branchRepo = AppDataSource.getRepository('Branch')
-  const zoneRepo = AppDataSource.getRepository('Zone')
-  const tableRepo = AppDataSource.getRepository('Table')
-  const categoryRepo = AppDataSource.getRepository('Category')
-  const productRepo = AppDataSource.getRepository('Product')
-  const optionRepo = AppDataSource.getRepository('ProductOption')
-  const valueRepo = AppDataSource.getRepository('OptionValue')
-  const badgeRepo = AppDataSource.getRepository('Badge')
+  const branchRepo    = AppDataSource.getRepository('Branch')
+  const zoneRepo      = AppDataSource.getRepository('Zone')
+  const tableRepo     = AppDataSource.getRepository('Table')
+  const categoryRepo  = AppDataSource.getRepository('Category')
+  const productRepo   = AppDataSource.getRepository('Product')
+  const optionRepo    = AppDataSource.getRepository('ProductOption')
+  const valueRepo     = AppDataSource.getRepository('OptionValue')
+  const badgeRepo     = AppDataSource.getRepository('Badge')
   const challengeRepo = AppDataSource.getRepository('Challenge')
-  const eventRepo = AppDataSource.getRepository('CafeEvent')
+  const eventRepo     = AppDataSource.getRepository('CafeEvent')
+  const tenantRepo    = AppDataSource.getRepository('Tenant')
+  const roleRepo      = AppDataSource.getRepository('Role')
+  const userRepo      = AppDataSource.getRepository('User')
+  const staffRepo     = AppDataSource.getRepository('Staff')
 
-  // Branch
+  // ── Tenant ──────────────────────────────────────────────────────────────────
+  const tenant = await tenantRepo.save(tenantRepo.create({
+    slug: 'nodo-demo',
+    name: 'NODO Demo',
+    plan: 'pro',
+    branding: { primaryColor: '#c8973a', accentColor: '#e8b355', logoUrl: null, fontFamily: null },
+  }))
+  console.log('✓ Tenant created:', tenant.id)
+
+  // Default roles for the tenant
+  const [adminRole] = await roleRepo.save([
+    roleRepo.create({ tenantId: tenant.id, name: 'admin',   permissions: { orders: ['read','write','delete'], products: ['read','write','delete'], tables: ['read','write'], reports: ['read'], staff: ['read','write','delete'], billing: ['read','write'] } }),
+    roleRepo.create({ tenantId: tenant.id, name: 'manager', permissions: { orders: ['read','write'], products: ['read','write'], tables: ['read','write'], reports: ['read'], staff: ['read'], billing: ['read'] } }),
+    roleRepo.create({ tenantId: tenant.id, name: 'barista', permissions: { orders: ['read','write'], products: ['read'], tables: ['read'] } }),
+    roleRepo.create({ tenantId: tenant.id, name: 'waiter',  permissions: { orders: ['read','write'], tables: ['read','write'] } }),
+  ])
+  console.log('✓ Roles created')
+
+  // Superadmin user
+  const superadminEmail = process.env.SUPERADMIN_EMAIL ?? 'admin@nodo.cafe'
+  let adminUser = await userRepo.findOne({ where: { email: superadminEmail } })
+  if (!adminUser) {
+    adminUser = await userRepo.save(userRepo.create({ email: superadminEmail, name: 'Admin' }))
+    console.log('✓ Superadmin user created:', superadminEmail)
+  }
+  await staffRepo.save(staffRepo.create({ tenantId: tenant.id, userId: adminUser.id, roleId: adminRole.id }))
+  console.log('✓ Admin staff record created')
+
+  // ── Branch ──────────────────────────────────────────────────────────────────
   const branch = await branchRepo.save(branchRepo.create({
     name: 'NODO Café — Centro',
     slug: 'centro',
     address: 'Av. Juárez 100, Centro Histórico',
     timezone: 'America/Mexico_City',
+    tenantId: tenant.id,
   }))
   console.log('✓ Branch created:', branch.id)
 
@@ -179,8 +212,10 @@ async function seed() {
   console.log('✓ Events seeded')
 
   console.log('\n🎉 Seed complete!')
-  console.log(`\nBranch ID: ${branch.id}`)
-  console.log('Table QR tokens:')
+  console.log(`\nTenant ID: ${tenant.id}`)
+  console.log(`Branch ID:  ${branch.id}`)
+  console.log(`Admin user: ${superadminEmail}`)
+  console.log('\nTable QR tokens:')
   tables.slice(0, 3).forEach((t) => console.log(`  Mesa ${t.number}: /m/${t.qrToken}`))
 
   await AppDataSource.destroy()

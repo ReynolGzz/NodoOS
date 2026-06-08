@@ -108,7 +108,7 @@ export function OrderTrackingPage({ orderId, tableToken, locale = 'es' }: OrderT
         {!connected && (
           <p className="mt-4 text-center text-xs text-gray-400 flex items-center justify-center gap-1">
             <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
-            Reconectando...
+            {t('reconnecting')}
           </p>
         )}
       </div>

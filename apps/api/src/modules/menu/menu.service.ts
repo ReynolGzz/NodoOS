@@ -6,6 +6,7 @@ import { Table } from '../../entities/table.entity'
 import { Zone } from '../../entities/zone.entity'
 import { Category } from '../../entities/category.entity'
 import { Product } from '../../entities/product.entity'
+import { Tenant } from '../../entities/tenant.entity'
 
 @Injectable()
 export class MenuService {
@@ -15,6 +16,7 @@ export class MenuService {
     @InjectRepository(Zone) private zoneRepo: Repository<Zone>,
     @InjectRepository(Category) private categoryRepo: Repository<Category>,
     @InjectRepository(Product) private productRepo: Repository<Product>,
+    @InjectRepository(Tenant) private tenantRepo: Repository<Tenant>,
   ) {}
 
   async getMenuByTableToken(tableToken: string) {
@@ -37,12 +39,20 @@ export class MenuService {
       }),
     ])
 
+    // Attach tenant branding if the branch belongs to a tenant
+    let branding: Tenant['branding'] | null = null
+    if (table.branch.tenantId) {
+      const tenant = await this.tenantRepo.findOne({ where: { id: table.branch.tenantId } })
+      branding = tenant?.branding ?? null
+    }
+
     return {
       branch: table.branch,
       table: { id: table.id, number: table.number, qrToken: table.qrToken },
       zone: table.zone ?? undefined,
       categories,
       products,
+      branding,
     }
   }
 }

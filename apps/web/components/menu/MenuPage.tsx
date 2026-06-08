@@ -41,6 +41,21 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
   const { mode, setMode } = useProductivityMode()
   const isWorkMode = mode === 'work' || mode === 'study'
 
+  // Apply white-label branding as CSS variables
+  useEffect(() => {
+    const branding = (menuData as any)?.branding
+    if (!branding) return
+    const root = document.documentElement
+    if (branding.primaryColor) root.style.setProperty('--color-brand', branding.primaryColor)
+    if (branding.accentColor)  root.style.setProperty('--color-accent', branding.accentColor)
+    if (branding.fontFamily)   root.style.setProperty('--font-display', branding.fontFamily)
+    return () => {
+      root.style.removeProperty('--color-brand')
+      root.style.removeProperty('--color-accent')
+      root.style.removeProperty('--font-display')
+    }
+  }, [menuData])
+
   useEffect(() => {
     setTableToken(tableToken)
     api.get<MenuData>(`/api/menu/${tableToken}`)
@@ -130,6 +145,7 @@ export function MenuPage({ tableToken, locale }: MenuPageProps) {
           <WorkModeBar
             mode={mode as 'work' | 'study'}
             tableToken={tableToken}
+            branchId={menuData.branch.id}
             locale={locale}
             onModeChange={() => setMode('casual')}
           />

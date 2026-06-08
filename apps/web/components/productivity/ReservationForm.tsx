@@ -81,7 +81,7 @@ export function ReservationForm({ branchId, locale, accessToken, onSuccess }: Re
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-gray-500 block mb-1">Hora</label>
+          <label className="text-xs font-medium text-gray-500 block mb-1">{t('timeLabel')}</label>
           <input
             type="time"
             value={time}
@@ -123,7 +123,7 @@ export function ReservationForm({ branchId, locale, accessToken, onSuccess }: Re
 
       {/* Mode preference */}
       <div>
-        <label className="text-xs font-medium text-gray-500 block mb-2">{t('reserveMode')} <span className="text-gray-400">(opcional)</span></label>
+        <label className="text-xs font-medium text-gray-500 block mb-2">{t('reserveMode')} <span className="text-gray-400">({t('optional')})</span></label>
         <div className="flex gap-2 flex-wrap">
           {['', 'work', 'study', 'meeting'].map((m) => (
             <button
@@ -135,7 +135,7 @@ export function ReservationForm({ branchId, locale, accessToken, onSuccess }: Re
                   : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700'
               }`}
             >
-              {m === '' ? 'Sin preferencia' : t(m as any)}
+              {m === '' ? t('noPreference') : t(m as any)}
             </button>
           ))}
         </div>

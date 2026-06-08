@@ -37,7 +37,12 @@ export class OrdersGateway implements OnGatewayInit {
     @MessageBody() data: { branchId: string; token: string },
     @ConnectedSocket() client: Socket,
   ) {
-    // TODO: validate kitchen token
+    const expectedToken = process.env.KITCHEN_TOKEN ?? ''
+    if (expectedToken && data.token !== expectedToken) {
+      client.emit('error', { message: 'Invalid kitchen token' })
+      client.disconnect()
+      return
+    }
     client.join(`kitchen:${data.branchId}`)
   }
 

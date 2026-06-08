@@ -116,7 +116,7 @@ export function ProfileView({ locale, tableToken }: ProfileViewProps) {
           </button>
           <h1 className="font-bold text-gray-900 dark:text-gray-100 flex-1">{t('title')}</h1>
           <button onClick={logout} className="text-xs text-gray-400 hover:text-red-500 transition-colors">
-            Salir
+            {t('logout')}
           </button>
         </div>
 
@@ -229,7 +229,7 @@ export function ProfileView({ locale, tableToken }: ProfileViewProps) {
                           {new Date(r.reservedAt).toLocaleDateString(locale === 'en' ? 'en-US' : 'es-MX', { weekday: 'short', month: 'short', day: 'numeric' })}
                           {' · '}{new Date(r.reservedAt).toLocaleTimeString(locale === 'en' ? 'en-US' : 'es-MX', { hour: '2-digit', minute: '2-digit' })}
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">{r.partySize} personas · {r.durationMinutes / 60}h{r.mode ? ` · ${r.mode}` : ''}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{r.partySize} {tProd('people')} · {r.durationMinutes / 60}h{r.mode ? ` · ${r.mode}` : ''}</p>
                       </div>
                       <span className="text-xs font-medium px-2 py-1 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
                         {r.status}

@@ -101,7 +101,7 @@ export function BillSplitter({ orderId, total, locale }: BillSplitterProps) {
         {/* Detailed split */}
         {split && (
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Desglose</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('breakdown')}</p>
             {split.items.map((item, i) => (
               <div key={i} className="flex items-center justify-between text-sm">
                 <span className="text-gray-700 dark:text-gray-300 truncate flex-1">{item.name}</span>
