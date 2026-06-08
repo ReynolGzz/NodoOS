@@ -94,6 +94,7 @@ export interface MenuData {
   zone?: Zone
   categories: Category[]
   products: Product[]
+  branding?: TenantBranding | null
 }
 
 // ─── Cart & Order ──────────────────────────────────────────────────────────────

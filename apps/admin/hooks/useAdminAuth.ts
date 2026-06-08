@@ -19,7 +19,8 @@ export function useAdminAuth() {
       const locale = pathname.split('/')[1] ?? 'es'
       router.replace(`/${locale}/login`)
     }
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
 
   function logout() {
     localStorage.removeItem(TOKEN_KEY)

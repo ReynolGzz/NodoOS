@@ -1,14 +1,15 @@
 'use client'
 
-import { useState, use } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useRouter, useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { storeAdminToken } from '@/hooks/useAdminAuth'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
 
-export default function AdminLoginPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = use(params)
+export default function AdminLoginPage() {
+  const params = useParams()
+  const locale = (params?.locale as string) ?? 'es'
   const t = useTranslations('auth')
   const router = useRouter()
   const [email, setEmail] = useState('')
