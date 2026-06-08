@@ -14,6 +14,8 @@ import { RecommendationsModule } from './modules/recommendations/recommendations
 import { GamificationModule } from './modules/gamification/gamification.module'
 import { ProductivityModule } from './modules/productivity/productivity.module'
 import { AnalyticsModule } from './modules/analytics/analytics.module'
+import { TenantsModule } from './modules/tenants/tenants.module'
+import { BillingModule } from './modules/billing/billing.module'
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { AnalyticsModule } from './modules/analytics/analytics.module'
     GamificationModule,
     ProductivityModule,
     AnalyticsModule,
+    TenantsModule,
+    BillingModule,
   ],
 })
 export class AppModule {}

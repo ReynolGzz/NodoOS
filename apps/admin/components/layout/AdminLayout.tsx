@@ -17,6 +17,8 @@ const NAV_ITEMS = [
   { href: 'tables',     icon: '🪑', labelKey: 'tables' },
   { href: 'analytics',  icon: '📈', labelKey: 'analytics' },
   { href: 'campaigns',  icon: '📢', labelKey: 'campaigns' },
+  { href: 'tenants',    icon: '🏢', labelKey: 'multiSucursal' },
+  { href: 'billing',    icon: '💳', labelKey: 'billing' },
 ]
 
 export function AdminLayout({ children, locale, branchId }: AdminLayoutProps) {

@@ -383,3 +383,75 @@ export interface Campaign {
   lastRunAt: string | null
   createdAt: string
 }
+
+// ─── SaaS / Multi-tenant ──────────────────────────────────────────────────────
+
+export type TenantPlan = 'starter' | 'pro' | 'enterprise'
+
+export interface TenantBranding {
+  logoUrl: string | null
+  primaryColor: string
+  accentColor: string
+  fontFamily: string | null
+}
+
+export interface Tenant {
+  id: string
+  slug: string
+  name: string
+  plan: TenantPlan
+  branding: TenantBranding
+  customDomain: string | null
+  isActive: boolean
+  createdAt: string
+}
+
+export interface RolePermissions {
+  orders?: string[]
+  products?: string[]
+  tables?: string[]
+  reports?: string[]
+  staff?: string[]
+  billing?: string[]
+}
+
+export interface TenantRole {
+  id: string
+  tenantId: string
+  name: string
+  permissions: RolePermissions
+}
+
+export interface StaffMember {
+  id: string
+  tenantId: string
+  userId: string
+  roleId: string
+  branchId: string | null
+  createdAt: string
+  user: { id: string; name: string | null; email: string }
+  role: TenantRole
+}
+
+export interface BranchStat {
+  branch: { id: string; name: string; slug: string }
+  todayOrders: number
+  todayRevenue: number
+  activeOrders: number
+  staffCount: number
+}
+
+export interface TenantOverview {
+  tenant: Tenant & { plan: TenantPlan }
+  summary: { totalRevenue: number; totalOrders: number; totalBranches: number }
+  branches: BranchStat[]
+}
+
+export interface BillingPlan {
+  id: TenantPlan
+  label: string
+  priceMonthlyMXN: number
+  maxBranches: number
+  maxOrdersPerMonth: number | null
+  features: string[]
+}

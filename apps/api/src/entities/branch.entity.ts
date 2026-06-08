@@ -24,6 +24,9 @@ export class Branch {
   @Column({ default: 'America/Mexico_City' })
   timezone: string
 
+  @Column({ name: 'tenant_id', nullable: true })
+  tenantId: string | null
+
   @Column({ name: 'is_active', default: true })
   isActive: boolean
 
