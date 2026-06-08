@@ -22,6 +22,6 @@ import { Order } from '../../entities/order.entity'
   ],
   controllers: [UsersController],
   providers: [UsersService, LoyaltyService, PushService],
-  exports: [UsersService, LoyaltyService],
+  exports: [UsersService, LoyaltyService, PushService],
 })
 export class UsersModule {}

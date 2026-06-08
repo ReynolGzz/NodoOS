@@ -86,6 +86,20 @@ services:
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:3001
 
+  forecasting:
+    build:
+      context: ./apps/forecasting
+    container_name: nodo-forecasting
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
 volumes:
   postgres_data:
   redis_data:

@@ -13,6 +13,7 @@ import { UsersModule } from './modules/users/users.module'
 import { RecommendationsModule } from './modules/recommendations/recommendations.module'
 import { GamificationModule } from './modules/gamification/gamification.module'
 import { ProductivityModule } from './modules/productivity/productivity.module'
+import { AnalyticsModule } from './modules/analytics/analytics.module'
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ProductivityModule } from './modules/productivity/productivity.module'
     RecommendationsModule,
     GamificationModule,
     ProductivityModule,
+    AnalyticsModule,
   ],
 })
 export class AppModule {}

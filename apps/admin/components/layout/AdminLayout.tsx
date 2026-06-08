@@ -11,10 +11,12 @@ interface AdminLayoutProps {
 }
 
 const NAV_ITEMS = [
-  { href: 'dashboard', icon: '📊', labelKey: 'dashboard' },
-  { href: 'orders',    icon: '📋', labelKey: 'orders' },
-  { href: 'products',  icon: '☕', labelKey: 'products' },
-  { href: 'tables',    icon: '🪑', labelKey: 'tables' },
+  { href: 'dashboard',  icon: '📊', labelKey: 'dashboard' },
+  { href: 'orders',     icon: '📋', labelKey: 'orders' },
+  { href: 'products',   icon: '☕', labelKey: 'products' },
+  { href: 'tables',     icon: '🪑', labelKey: 'tables' },
+  { href: 'analytics',  icon: '📈', labelKey: 'analytics' },
+  { href: 'campaigns',  icon: '📢', labelKey: 'campaigns' },
 ]
 
 export function AdminLayout({ children, locale, branchId }: AdminLayoutProps) {

@@ -311,3 +311,75 @@ export interface UserProfile {
   topProducts: Array<{ productId: string; orderCount: number }>
   lastUpdated: string
 }
+
+// ─── Analytics ────────────────────────────────────────────────────────────────
+
+export interface DashboardStats {
+  totalOrdersToday: number
+  totalRevenueToday: number
+  activeOrders: number
+  avgOrderValue: number
+  totalOrdersPeriod: number
+  totalRevenuePeriod: number
+}
+
+export interface DailyRevenue {
+  date: string
+  orders: number
+  revenue: number
+}
+
+export interface HourlyRevenue {
+  hour: number
+  orders: number
+  revenue: number
+}
+
+export interface TopProduct {
+  productId: string
+  nameEs: string
+  nameEn: string
+  totalQuantity: number
+  totalRevenue: number
+}
+
+export interface DemandForecast {
+  id: string
+  branchId: string
+  forecastDate: string
+  hourOfDay: number
+  predictedOrders: number
+  predictedRevenue: number
+  confidenceScore: number
+}
+
+export interface CustomerStats {
+  newUsers: number
+  returningUsers: number
+  totalUsers: number
+  period: number
+}
+
+export interface CrmSegment {
+  id: string
+  branchId: string
+  name: string
+  description: string
+  rules: Record<string, unknown>
+  userCount: number
+  updatedAt: string
+}
+
+export interface Campaign {
+  id: string
+  branchId: string
+  name: string
+  segmentId: string | null
+  channel: string
+  trigger: string
+  messageTemplate: { es: string; en: string }
+  sentCount: number
+  isActive: boolean
+  lastRunAt: string | null
+  createdAt: string
+}
