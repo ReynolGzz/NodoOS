@@ -15,6 +15,7 @@ interface ProductsManagerProps {
 
 export function ProductsManager({ branchId, locale }: ProductsManagerProps) {
   const t = useTranslations('admin')
+  const tCommon = useTranslations('common')
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -46,13 +47,13 @@ export function ProductsManager({ branchId, locale }: ProductsManagerProps) {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-8 text-gray-400">Cargando...</div>
+          <div className="flex justify-center py-8 text-gray-400">{tCommon('loading')}</div>
         ) : (
           <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
             <table className="w-full">
               <thead className="border-b border-gray-100 dark:border-gray-800">
                 <tr>
-                  {['Producto', 'Precio', 'Categoría', 'Estado', 'Acciones'].map((h) => (
+                  {([t('thProduct'), t('thPrice'), t('thCategory'), t('thStatus'), t('thActions')]).map((h) => (
                     <th key={h} className="text-left text-xs font-semibold text-gray-500 px-4 py-3">{h}</th>
                   ))}
                 </tr>
@@ -79,7 +80,7 @@ export function ProductsManager({ branchId, locale }: ProductsManagerProps) {
                           onClick={() => toggleAvailability(product)}
                           className="text-xs text-brand-500 hover:underline"
                         >
-                          {product.isAvailable ? 'Desactivar' : 'Activar'}
+                          {product.isAvailable ? t('deactivate') : t('activate')}
                         </button>
                       </td>
                     </tr>

@@ -17,6 +17,7 @@ interface TablesManagerProps {
 
 export function TablesManager({ branchId, locale }: TablesManagerProps) {
   const t = useTranslations('admin')
+  const tCommon = useTranslations('common')
   const [tables, setTables] = useState<Table[]>([])
   const [loading, setLoading] = useState(true)
   const [qrModal, setQrModal] = useState<{ table: Table; dataUrl: string } | null>(null)
@@ -55,7 +56,7 @@ export function TablesManager({ branchId, locale }: TablesManagerProps) {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-8 text-gray-400">Cargando...</div>
+          <div className="flex justify-center py-8 text-gray-400">{tCommon('loading')}</div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {tables.map((table) => (
@@ -97,7 +98,7 @@ export function TablesManager({ branchId, locale }: TablesManagerProps) {
             </p>
             <div className="flex gap-2 mt-4">
               <Button size="sm" variant="secondary" className="flex-1" onClick={() => setQrModal(null)}>
-                Cerrar
+                {tCommon('close')}
               </Button>
               <Button
                 size="sm"
@@ -109,7 +110,7 @@ export function TablesManager({ branchId, locale }: TablesManagerProps) {
                   a.click()
                 }}
               >
-                Descargar
+                {t('download')}
               </Button>
             </div>
           </div>

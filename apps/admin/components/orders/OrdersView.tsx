@@ -9,14 +9,6 @@ import { Badge } from '@nodo/ui'
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
 
-const STATUS_BADGE = {
-  [OrderStatus.RECEIVED]:  { label: 'Recibido',   variant: 'default' as const },
-  [OrderStatus.PREPARING]: { label: 'Preparando', variant: 'warning' as const },
-  [OrderStatus.READY]:     { label: 'Listo',      variant: 'info' as const },
-  [OrderStatus.DELIVERED]: { label: 'Entregado',  variant: 'success' as const },
-  [OrderStatus.CANCELLED]: { label: 'Cancelado',  variant: 'danger' as const },
-}
-
 interface OrdersViewProps {
   branchId: string
   locale: string
@@ -24,8 +16,18 @@ interface OrdersViewProps {
 
 export function OrdersView({ branchId, locale }: OrdersViewProps) {
   const t = useTranslations('admin')
+  const tCommon = useTranslations('common')
+  const tStatus = useTranslations('orderStatus')
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
+
+  const STATUS_BADGE = {
+    [OrderStatus.RECEIVED]:  { label: tStatus('received'),  variant: 'default' as const },
+    [OrderStatus.PREPARING]: { label: tStatus('preparing'), variant: 'warning' as const },
+    [OrderStatus.READY]:     { label: tStatus('ready'),     variant: 'info' as const },
+    [OrderStatus.DELIVERED]: { label: tStatus('delivered'), variant: 'success' as const },
+    [OrderStatus.CANCELLED]: { label: tStatus('cancelled'), variant: 'danger' as const },
+  }
 
   useEffect(() => {
     if (!branchId) return
@@ -41,7 +43,7 @@ export function OrdersView({ branchId, locale }: OrdersViewProps) {
         <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">{t('orders')}</h1>
 
         {loading ? (
-          <div className="flex justify-center py-8 text-gray-400">Cargando...</div>
+          <div className="flex justify-center py-8 text-gray-400">{tCommon('loading')}</div>
         ) : (
           <div className="space-y-3">
             {orders.map((order) => {
@@ -54,21 +56,21 @@ export function OrdersView({ branchId, locale }: OrdersViewProps) {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
                       <span className="font-bold text-gray-900 dark:text-gray-100">
-                        Mesa {order.table?.number ?? '?'}
+                        {t('tableNumber', { number: order.table?.number ?? '?' })}
                       </span>
                       <Badge variant={variant}>{label}</Badge>
                     </div>
                     <span className="font-bold text-brand-500">${order.total.toFixed(2)}</span>
                   </div>
                   <p className="text-xs text-gray-500">
-                    {order.items.length} artículo{order.items.length !== 1 ? 's' : ''} ·{' '}
+                    {order.items.length} {order.items.length !== 1 ? t('items') : t('item')} ·{' '}
                     {new Date(order.createdAt).toLocaleTimeString(locale === 'en' ? 'en-US' : 'es-MX', { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
               )
             })}
             {orders.length === 0 && (
-              <div className="text-center py-12 text-gray-400">Sin órdenes recientes</div>
+              <div className="text-center py-12 text-gray-400">{t('noRecentOrders')}</div>
             )}
           </div>
         )}

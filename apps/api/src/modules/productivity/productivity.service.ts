@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, MoreThanOrEqual } from 'typeorm'
+import { Repository, MoreThanOrEqual, IsNull } from 'typeorm'
 import { TableSession } from '../../entities/table-session.entity'
 import { Reservation } from '../../entities/reservation.entity'
 import { PlaylistVote } from '../../entities/playlist-vote.entity'
@@ -34,7 +34,7 @@ export class ProductivityService {
 
     // Close any open session for this table
     await this.sessionRepo.update(
-      { tableId: table.id, endedAt: undefined as any },
+      { tableId: table.id, endedAt: IsNull() },
       { endedAt: new Date() },
     )
 
@@ -51,7 +51,7 @@ export class ProductivityService {
     const table = await this.tableRepo.findOne({ where: { qrToken: tableToken, isActive: true } })
     if (!table) return null
     return this.sessionRepo.findOne({
-      where: { tableId: table.id, endedAt: undefined as any },
+      where: { tableId: table.id, endedAt: IsNull() },
       order: { startedAt: 'DESC' },
     })
   }
@@ -59,7 +59,7 @@ export class ProductivityService {
   async endSession(tableToken: string): Promise<void> {
     const table = await this.tableRepo.findOne({ where: { qrToken: tableToken } })
     if (!table) return
-    await this.sessionRepo.update({ tableId: table.id, endedAt: undefined as any }, { endedAt: new Date() })
+    await this.sessionRepo.update({ tableId: table.id, endedAt: IsNull() }, { endedAt: new Date() })
   }
 
   // ─── Reservations ─────────────────────────────────────────────────────────────

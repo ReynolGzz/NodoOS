@@ -177,7 +177,13 @@
     "priority": "Priority",
     "orderQueue": "Order queue",
     "allOrders": "All",
-    "activeOrders": "Active"
+    "activeOrders": "Active",
+    "setupTitle": "Kitchen Display Setup",
+    "branchIdLabel": "Branch ID",
+    "branchIdPlaceholder": "branch uuid",
+    "tokenLabel": "Kitchen Token",
+    "tokenPlaceholder": "access token",
+    "startDisplay": "Start kitchen display"
   },
   "admin": {
     "title": "Admin Panel",
@@ -274,7 +280,18 @@
     "manageSubscription": "Manage subscription",
     "enterpriseCta": "Need more than 3 branches?",
     "enterpriseCtaDesc": "Enterprise includes unlimited branches, full white-label, custom domain, and 99.9% SLA.",
-    "contactSales": "Talk to sales"
+    "contactSales": "Talk to sales",
+    "download": "Download",
+    "noRecentOrders": "No recent orders",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "thProduct": "Product",
+    "thPrice": "Price",
+    "thCategory": "Category",
+    "thStatus": "Status",
+    "thActions": "Actions",
+    "item": "item",
+    "items": "items"
   },
   "productivity": {
     "mode": "Mode",
@@ -323,6 +340,7 @@
   "gamification": {
     "progress": "Progress",
     "challenges": "Challenges",
+    "completed": "Completed ✓",
     "level": "Level",
     "xp": "{xp} XP",
     "xpToNext": "{xp} XP to {level}",

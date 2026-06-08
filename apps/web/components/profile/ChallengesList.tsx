@@ -84,7 +84,7 @@ export function ChallengesList({ challenges, events, locale, accessToken, branch
       {/* Completed challenges */}
       {completed.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-green-500 uppercase tracking-wide">Completados ✓</p>
+          <p className="text-xs font-semibold text-green-500 uppercase tracking-wide">{t('completed')}</p>
           {completed.map((challenge) => (
             <div key={challenge.id} className="flex items-center justify-between py-2 px-3 bg-green-50 dark:bg-green-900/10 rounded-xl border border-green-100 dark:border-green-800/30">
               <p className="text-sm text-green-700 dark:text-green-400 font-medium">

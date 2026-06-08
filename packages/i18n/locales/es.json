@@ -177,7 +177,13 @@
     "priority": "Prioridad",
     "orderQueue": "Cola de órdenes",
     "allOrders": "Todas",
-    "activeOrders": "Activas"
+    "activeOrders": "Activas",
+    "setupTitle": "Pantalla de Cocina",
+    "branchIdLabel": "ID de Sucursal",
+    "branchIdPlaceholder": "uuid de la sucursal",
+    "tokenLabel": "Token de Cocina",
+    "tokenPlaceholder": "token de acceso",
+    "startDisplay": "Iniciar pantalla de cocina"
   },
   "admin": {
     "title": "Panel de Administración",
@@ -274,7 +280,18 @@
     "manageSubscription": "Gestionar suscripción",
     "enterpriseCta": "¿Necesitas más de 3 sucursales?",
     "enterpriseCtaDesc": "El plan Enterprise incluye sucursales ilimitadas, white-label completo, dominio propio y un SLA del 99.9%.",
-    "contactSales": "Hablar con ventas"
+    "contactSales": "Hablar con ventas",
+    "download": "Descargar",
+    "noRecentOrders": "Sin órdenes recientes",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "thProduct": "Producto",
+    "thPrice": "Precio",
+    "thCategory": "Categoría",
+    "thStatus": "Estado",
+    "thActions": "Acciones",
+    "item": "artículo",
+    "items": "artículos"
   },
   "productivity": {
     "mode": "Modo",
@@ -323,6 +340,7 @@
   "gamification": {
     "progress": "Progreso",
     "challenges": "Retos",
+    "completed": "Completados ✓",
     "level": "Nivel",
     "xp": "{xp} XP",
     "xpToNext": "{xp} XP para {level}",
